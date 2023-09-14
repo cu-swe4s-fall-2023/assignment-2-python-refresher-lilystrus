@@ -11,7 +11,7 @@ which_fires = 3
 
 # import the module containing get_column() and call it for parameters set above 
 import my_utils as mu
-fires = mu.get_column(file_name,country_column,country,which_fires)
+fires = mu.get_column(file_name,country_column,country,result_column=which_fires)
 
 # convert the string list 'fires' into a float list 'fires_num'
 # add all elements of 'fires_num' to get total number of fires for all years documented in the Agro file
@@ -21,7 +21,8 @@ print('First, call get_column() for the Savanna fires : Their total number in '+
 
 # then look into the Forest fires, which is column 4 
 which_fires = 4 
-fires = mu.get_column(file_name,country_column,country,which_fires)
+fires = mu.get_column(file_name,country_column,country,result_column=which_fires)
 fires_num = [ float(i) for i in fires ] 
 fires_sum = sum(fires_num)
 print('Then, call get_column() for the Forest fires: Their total number in '+country+' is '+str(fires_sum))
+
