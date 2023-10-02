@@ -1,10 +1,19 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/oQi7O4AA)
-# python-refresher
+# best practices 
 
-1) The my_utils module now contains a get_column() function that can extract the contents from specific cells of a column of a user-specified data file. The extraction is based on user-specified criteria placed on another column of the file. 
- 
-2) Print_fires.py has been updated to demonstrate two possible uses of get_column() for the case of the Savanna fires and Forest fires columns in the Agrofood_co2_emission.csv file. The total number of each type of fire for the U.S. is printed on the screen with explanatory messages. 
+This repository demonstrates how to use best practices when writing source code. The specific features demonstrated here are :
 
-4) The column whose selected cells are extracted by get_column() were originally passed as a required argument. It was later changed to an optional argument that defaults to the first column of the data file. Print_fires.py changed accordingly. 
+1) The use of docstrings and comments for documentation of functions, programs and specific blocks of code
 
-3) Created a run.sh script that runs print_fires.py
+2) The use of a parser to read user input from the command line instead of sys.argv[]
+
+3) The proper use of whitespaces, indentation and blank lines that will make your code PEP8 compatible
+
+4) The use of the try,except error handling method for reading files and converting values from one type to    
+   another
+   
+5) How to write code using functions that do only one thing, and calling other functions within functions if 
+   a function needs to do more than one thing. 
+
+6) The use of a main() function in programs that contain code in functions and code that needs to be executed   
+   every time you call the program.
+
