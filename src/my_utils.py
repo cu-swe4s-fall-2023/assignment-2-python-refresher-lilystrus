@@ -8,6 +8,31 @@
 
 """
 import sys
+import os
+
+# sys.path.append('../data') : not working?
+# found alternative
+# get the current directory
+cwdir = os.getcwd()
+# if you are calling my_utils from test_my_utils,
+# you are in /test/unit-test so ../../data
+if 'unit-test' in cwdir:
+    # go back two dirs
+    pardir = os.path.dirname(cwdir)
+    grpardir = os.path.dirname(pardir)
+    # go forward one dir
+    datadir = grpardir + '/data'
+    # append to your path
+    sys.path.append(datadir)
+# if you are calling my_utils from print_fires
+# you are in /src so ../data
+if 'src' in cwdir:
+    # go back one dir
+    pardir = os.path.dirname(cwdir)
+    # go forward one dir
+    datadir = pardir+'/data'
+    # append to your path
+    sys.path.append(datadir)
 
 
 def handle_file_io(file_name):
@@ -16,7 +41,7 @@ def handle_file_io(file_name):
     Parameters
     ----------
     file_name : string
-                Path to the data file (can be relative if file in cwd)
+                The name of the file (with extension)
 
     Returns
     -------
@@ -24,16 +49,15 @@ def handle_file_io(file_name):
         Can be used outside this function for operations such as read/write
 
     """
+    f = None
     try:
-        f = open(file_name, 'r')
+        f = open(datadir+'/'+file_name, 'r')
     except FileNotFoundError:
-        print('Could not find '+file_name+'...exiting')
-        sys.exit(1)
+        print('Could not find '+file_name+'...exiting\n')
     except PermissionError:
-        print('Could not open '+file_name+'...exiting')
-        sys.exit(1)
+        print('Could not open '+file_name+'...exiting\n')
     except Exception:
-        print('Unknown error in opening '+filename+'...exiting')
+        print('Unknown error in opening '+filename+'...exiting\n')
 
     return f
 
@@ -52,25 +76,25 @@ def convert_str_to_int(Str):
           The result of the conversion
 
     """
+    Int = None
     try:
         Int = int(float(Str))
     except TypeError:
-        print('Number of fires from data file is not of type string...exiting')
-        sys.exit(1)
+        print('Expected variable of type string...exiting\n')
     except Exception:
-        print('Unknown error in string to integer conversion...exiting')
-        sys.exit(1)
+        print('Unknown error in string to integer conversion...exiting\n')
 
     return Int
 
 
-def get_column(file_name, query_column, query_value, result_column=1):
+def get_column(file_name, query_column, query_value,
+               result_column=1, operation=None):
     """Function to extract data from a file
 
     Parameters
     ----------
     file_name     : string
-                    The path to the data file (can be relative)
+                    The name of the file (with extension)
 
     query_column  : integer
                     The column number of the country names
@@ -95,6 +119,8 @@ def get_column(file_name, query_column, query_value, result_column=1):
     ResultList = []
     # Try to open the requested data file or exit on error
     file = handle_file_io(file_name)
+    if file is None:
+        sys.exit(1)
 
     # Read file line by line and extract the requested information
     for line in file:
@@ -104,9 +130,72 @@ def get_column(file_name, query_column, query_value, result_column=1):
         if ListofLine[query_column-1] == query_value:
             # Convert data from string to integer
             NumFiresInt = convert_str_to_int(ListofLine[result_column-1])
+            if NumFiresInt is None:
+                sys.exit(1)
             # Add data to ResultList
             ResultList.append(NumFiresInt)
 
     file.close()
 
-    return ResultList
+    if operation is None:
+        return ResultList
+    elif operation == 'mean':
+        return find_mean(ResultList)
+    elif operation == 'median':
+        return find_median(ResultList)
+    elif operation == 'std':
+        mean = find_mean(ResultList)
+        return find_std(ResultList, mean)
+
+
+def valid_length(IntList):
+    ListLen = len(IntList)
+    dummy = None
+    try:
+        # If the division is not possible, ListLen has to be zero
+        dummy = 1/ListLen
+        dummy = ListLen
+    except Exception:
+        print('No entries present in the list of number of fires\n')
+    finally:
+        return dummy
+
+
+def find_mean(IntList):
+    mean = None
+    ListLen = valid_length(IntList)
+    if ListLen is not None:
+        mean = sum(IntList)/ListLen
+
+    return mean
+
+
+def find_median(IntList):
+    median = None
+    ListLen = valid_length(IntList)
+    if ListLen is not None:
+        SortedList = sorted(IntList)
+        Quotient = int(ListLen/2)
+        Modulus = ListLen % 2
+        # The median of a list is its 'center' number or
+        # the average of its two 'center' numbers
+        # It all depends on whether the length of the
+        # list is an even or odd number
+        if Modulus == 0:
+            median = (SortedList[Quotient-1] + SortedList[Quotient])/float(2)
+        else:
+            median = SortedList[(ListLen+1)/2-1]
+
+    return median
+
+
+def find_std(IntList, mean):
+    std = None
+    ListLen = valid_length(IntList)
+    if ListLen is not None:
+        std = .0
+        for i in range(0, ListLen-1):
+            std += (IntList[i]-mean)**float(2)/(ListLen-1)
+        return std**0.5
+    else:
+        return std
