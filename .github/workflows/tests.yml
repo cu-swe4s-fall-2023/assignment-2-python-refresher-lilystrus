@@ -19,6 +19,9 @@ jobs:
           python -m unittest test_my_utils.py
   run_func_test: 
     runs-on: ubuntu-latest 
+    defaults:
+      run:
+        shell: bash -el {0}
     steps:
       - uses: actions/checkout@v2 
       - uses: mamba-org/setup-micromamba@v1
@@ -30,33 +33,42 @@ jobs:
           bash test_print_fires.sh  
   run_style_check_my_utils:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
     steps:
       - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          environment-name: swe4s 
+          activate-environment: swe4s 
           environment-file: environment.yml
       - run: |
           cd src/
           pycodestyle my_utils.py
   run_style_check_print_fires:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
     steps:
       - uses: actions/checkout&v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          environment-name: swe4s 
+          activate-environment: swe4s 
           environment-file: environment.yml
       - run: |
           cd src/
           pycodestyle print_fires.py
   run_style_check_test_my_utils:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
     steps:
       - uses: actions/checkout&v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          environment-name: swe4s 
+          activate-environment: swe4s 
           environment-file: environment.yml
       - run: |
           cd /test/unit-test/
