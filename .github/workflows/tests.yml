@@ -17,7 +17,6 @@ jobs:
       - run: |
           cd test/unit-test
           python -m unittest test_my_utils.py
-          
     run_func_test: 
       runs-on: ubuntu-latest 
       steps:
