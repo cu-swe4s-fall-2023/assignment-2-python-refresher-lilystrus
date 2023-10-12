@@ -17,6 +17,50 @@ jobs:
       - run: |
           cd test/unit-test/
           python -m unittest test_my_utils.py
+  run_func_test: 
+    runs-on: ubuntu-latest 
+    steps:
+      - uses: actions/checkout@v2 
+      - uses: conda-incubator/setup-miniconda@v2 
+        with:
+          activate-environment: swe4s 
+          environment-file: environment.yml 
+      - run: |
+          cd test/func-test/
+          bash test_print_fires.sh  
+  run_style_check_my_utils:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2 
+        with:
+          activate-environment: swe4s 
+          environment-file: environment.yml 
+      - run: |
+          cd src/
+          pycodestyle my_utils.py
+  run_style_check_print_fires:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout&v2
+      - uses: conda-incubator/setup-miniconda@v2 
+        with:
+          activate-environment: swe4s 
+          environment-file: environment.yml 
+      - run: |
+          cd src/
+          pycodestyle print_fires.py
+  run_style_check_test_my_utils:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout&v2
+      - uses: conda-incubator/setup-miniconda@v2 
+        with:
+          activate-environment: swe4s 
+          environment-file: environment.yml 
+      - run: |
+          cd /test/unit-test/
+          pycodestyle test_my_utils.py
           
           
           
