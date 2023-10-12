@@ -11,8 +11,9 @@ jobs:
     runs-on: ubuntu-latest 
     steps:
       - uses: actions/checkout@v2 
-      - uses: pip3 install pycodestyle
       - run: |
+          python -m pip install --upgrade pip
+          pip install pycodestyle
           cd test/unit-test
           python -m unittest test_my_utils.py
           
@@ -20,7 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2 
-      - uses: pip3 install pycodestyle
       - run: |
+          python -m pip install --upgrade pip
+          pip install pycodestyle
           cd test/func-test
           bash test_print_fires.sh
