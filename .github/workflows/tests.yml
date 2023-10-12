@@ -26,8 +26,8 @@ jobs:
       - uses: actions/checkout@v2 
       - uses: mamba-org/setup-micromamba@v1
         with:
-          environment-name: swe4s 
           environment-file: environment.yml 
+          environment-name: swe4s 
       - run: |
           cd test/func-test/
           bash test_print_fires.sh  
@@ -40,8 +40,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          environment-name: swe4s 
           environment-file: environment.yml
+          environment-name: swe4s 
       - run: |
           cd src/
           pycodestyle my_utils.py
@@ -53,9 +53,9 @@ jobs:
     steps:
       - uses: actions/checkout&v2
       - uses: mamba-org/setup-micromamba@v1
-        with:
-          environment-name: swe4s 
+        with: 
           environment-file: environment.yml
+          environment-name: swe4s
       - run: |
           cd src/
           pycodestyle print_fires.py
@@ -67,9 +67,9 @@ jobs:
     steps:
       - uses: actions/checkout&v2
       - uses: mamba-org/setup-micromamba@v1
-        with:
-          environment-name: swe4s 
+        with: 
           environment-file: environment.yml
+          environment-name: swe4s
       - run: |
           cd /test/unit-test/
           pycodestyle test_my_utils.py
