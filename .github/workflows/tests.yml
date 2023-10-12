@@ -27,5 +27,5 @@ jobs:
             activate-environment: swe4s 
             environment-file: environment.yml 
         - run: |
-          cd test/func-test
-          bash test_print_fires.sh  
+            cd test/func-test
+            bash test_print_fires.sh  
