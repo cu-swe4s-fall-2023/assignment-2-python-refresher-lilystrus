@@ -30,3 +30,9 @@ A unit test for the library my_utils has been added, as well as a functional tes
 4) Improved error messages.
 
 5) A work-around for sys.path.append() that allows importing libraries and opening files while running from different folders than these of the libraries/files. Need to investigate with sys.path.append() is not working locally. 
+
+# Continous Integration with GitHub Actions
+
+1) A Tests.yml was added to the repository in branch ci. It checks that unit tests, functional tests and style checks on the files of Assignment 4 are able to run on a pristine OS on a machine other than that of the developer of the repository. Specifically, the presumed environment does not have pip and pycodestyle installed. 
+
+2) Conda installs but is not able to locate pycodestyle. Mamba does not install at all. In the case of Mambe, the tests do not run at all, they quote an error on line 1, which is not altered when Mamba is used. We therefore resorted to using pip install pycodestyle and installing pip before that. 
