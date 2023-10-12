@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          activate-environment: swe4s 
+          environment-name: swe4s 
           environment-file: environment.yml
       - run: |
           cd src/
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/checkout&v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          activate-environment: swe4s 
+          environment-name: swe4s 
           environment-file: environment.yml
       - run: |
           cd src/
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/checkout&v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          activate-environment: swe4s 
+          environment-name: swe4s 
           environment-file: environment.yml
       - run: |
           cd /test/unit-test/
