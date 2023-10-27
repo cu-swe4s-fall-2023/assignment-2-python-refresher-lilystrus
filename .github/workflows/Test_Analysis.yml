@@ -1,0 +1,121 @@
+name: Test_Analysis
+
+on:
+  push:
+    branches: [ '*' ] 
+  pull_request:
+    branches: [ master ]
+    
+jobs:
+  run_unit_test:
+    runs-on: ubuntu-latest 
+    steps:
+      - uses: actions/checkout@v2 
+      - run: |
+          cd test/unit-test
+          python -m unittest test_analysis_utils.py
+          
+  run_func_test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0} 
+    steps:
+      - uses: actions/checkout@v2 
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: environment.yml
+          activate-environment: swe4s
+      - run: |
+          cd test/func-test
+          bash test_combine_plots.sh
+          
+  run_func_test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0} 
+    steps:
+      - uses: actions/checkout@v2 
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: environment.yml
+          activate-environment: swe4s
+      - run: |
+          cd test/func-test
+          bash test_extract_columns.sh  
+          
+  run_func_test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0} 
+    steps:
+      - uses: actions/checkout@v2 
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: environment.yml
+          activate-environment: swe4s
+      - run: |
+          cd test/func-test
+          bash test_scatterplt.sh
+        
+  run_style_check_analysis_utils:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0} 
+    steps:
+      - uses: actions/checkout@v2 
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: environment.yml
+          activate-environment: swe4s
+      - run: |
+          cd src
+          pycodestyle analysis_utils.py
+          
+  run_style_check_combine_plots:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0} 
+    steps:
+      - uses: actions/checkout@v2 
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: environment.yml
+          activate-environment: swe4s
+      - run: |
+          cd src
+          pycodestyle combine_plots.py
+          
+  run_style_check_extract_columns:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0} 
+    steps:
+      - uses: actions/checkout@v2 
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: environment.yml
+          activate-environment: swe4s
+      - run: |
+          cd src
+          pycodestyle extract_columns.py
+          
+  run_style_check_scatterplt:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0} 
+    steps:
+      - uses: actions/checkout@v2 
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: environment.yml
+          activate-environment: swe4s
+      - run: |
+          cd src
+          pycodestyle scatterplt.py
