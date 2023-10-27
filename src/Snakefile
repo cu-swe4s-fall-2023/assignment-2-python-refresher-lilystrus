@@ -1,0 +1,82 @@
+def read_file_to_list(filename):
+    with open('../data/'+filename, 'r') as f:
+        lines = [line.strip() for line in f]
+    return lines
+    
+rule all:
+  input:
+    expand('{country}'+'-total_emission_correlations.png', country=read_file_to_list('countries.txt'))
+   
+rule download_data:
+  output:
+    'Agrofood_co2_emission.csv'
+  shell:
+    'wget -O {output} "https://docs.google.com/uc?export=download&id=1Wytf3ryf9EtOwaloms8HEzLG0yjtRqxr"'
+
+rule extract_temperature_data:
+  input: 
+    'Agrofood_co2_emission.csv'
+  output:
+    expand('{country}'+'_Average Temperature '+u'\xb0'+'C.txt', country=read_file_to_list('countries.txt'))
+  shell:
+    celsius_degree_symbol=$'\u00b0'
+    'temperature="Average Temperature $celsius_degree_symbol""C"',+
+    'python extract_columns.py --filename {input} --col_title "Average Temperature "+u"\xb0"+"C" --country "expand('{country}', country=read_file_to_list('countries.txt'))"'
+
+rule extract_ruralpop_data:
+  input: 
+    'Agrofood_co2_emission.csv'
+  output:
+    expand('{country}'+'_Rural population.txt', country=read_file_to_list('countries.txt'))
+  shell:
+    'python extract_columns.py --filename {input} --col_title "Rural population" --country "expand('{country}', country=read_file_to_list('countries.txt'))"'
+
+
+rule extract_urbanpop_data:
+  input: 
+    'Agrofood_co2_emission.csv'
+  output:
+     expand('{country}'+'_Urban population.txt', country=read_file_to_list('countries.txt'))
+  shell:
+    'python extract_columns.py --filename {input} --col_title "Urban population" --country "expand('{country}', country=read_file_to_list('countries.txt'))"'
+    
+
+rule extract_forestland_data:
+  input: 
+    'Agrofood_co2_emission.csv'
+  output:
+     expand('{country}'+'_Forestland.txt', country=read_file_to_list('countries.txt'))
+  shell:
+    'python extract_columns.py --filename {input} --col_title "Forestland" --country "expand('{country}', country=read_file_to_list('countries.txt'))"'
+
+
+rule extract_emissions_data:
+  input: 
+    'Agrofood_co2_emission.csv'
+  output:
+    expand('{country}'+'|'+'total_emission.txt', country=read_file_to_list('countries.txt'))
+  shell:
+    'python extract_columns.py --filename {input} --col_title "total_emission" --country "expand('{country}', country=read_file_to_list('countries.txt'))"'
+
+
+rule create_scatterplot:
+  input:
+    xf = '{country}'+'|'+'total_emission.txt',
+    yf = '{country}'+'_'+'{y}.txt'
+  output:
+    '{country}'+'_'+'{y}'+'_vs_Emissions.png'
+  shell:
+    'python scatterplot.py "{input.xf}" "{input.yf}" "Yearly Total Emissions (1990-2020)" "{wildcards.y}" "{output}"'
+
+
+rule combine_plots:
+  input:
+    p1 = '{country}'+'_Average Temperature '+u'\xb0'+'C_vs_Emissions.png',
+    p2 = '{country}'+'_Rural population_vs_Emissions.png',
+    p3 = '{country}'+'_Urban population_vs_Emissions.png',
+    p4 = '{country}'+'_Forestland_vs_Emissions.png'
+  output:
+    '{country}'+'-total_emission_correlations.png'
+  shell:
+    'python combine_plots.py "{input.p1}" "{input.p2}" "{input.p3}" "{input.p4}" "{wildcards.x} : Correlation of Various Quantities with Yearly Total CO2 Emissions" "{output}"'
+
